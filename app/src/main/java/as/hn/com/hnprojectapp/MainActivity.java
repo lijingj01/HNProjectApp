@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MyActivityBase {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
