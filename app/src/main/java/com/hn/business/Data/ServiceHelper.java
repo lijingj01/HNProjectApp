@@ -2,6 +2,7 @@ package com.hn.business.Data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -137,6 +138,65 @@ public class ServiceHelper {
         }
 
         return items;
+    }
+
+    public List<ProjectPlanEntity> GetCurrentProjectPlanList(String strUserCode,String strUserPwd) {
+
+        String methodName = "GetCurrentProjectPlans";
+
+        return getProjectPlanEntities(strUserCode, strUserPwd, methodName);
+    }
+
+    @NonNull
+    private List<ProjectPlanEntity> getProjectPlanEntities(String strUserCode, String strUserPwd, String methodName) {
+        List<ProjectPlanEntity> items = new ArrayList<>();
+        String soapAction = nameSpace + "/" + methodName + "/";
+
+        SoapObject rpc = new SoapObject(nameSpace, methodName);
+
+        // 设置需调用WebService接口需要传入的参数
+        rpc.addProperty("strUserCode", strUserCode);
+        rpc.addProperty("strPwdCode", strUserPwd);
+
+        // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        envelope.bodyOut = rpc;
+
+        // 设置是否调用的是dotNet开发的WebService
+        envelope.dotNet = true;
+        (new MarshalBase64()).register(envelope);
+
+        // 等价于envelope.bodyOut = rpc;
+        envelope.setOutputSoapObject(rpc);
+        HttpTransportSE transport = new HttpTransportSE(endPoint);
+        transport.debug = true;
+        try {
+
+            // 调用WebService
+            transport.call(soapAction, envelope);
+            if (envelope.getResponse() != null) {
+//                System.out.println(envelope.getResponse());
+                String strJsonList = String.valueOf(envelope.getResponse());
+
+                //region 将Json数据转换成实体对象
+                LoadJsonList(items, strJsonList);
+                //endregion
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return items;
+    }
+
+    public List<ProjectPlanEntity> GetOvertimeProjectPlanList(String strUserCode, String strUserPwd) {
+
+        String methodName = "GetOvertimeProjectPlans";
+        return getProjectPlanEntities(strUserCode, strUserPwd, methodName);
+    }
+    public List<ProjectPlanEntity> GetEndProjectPlanList(String strUserCode, String strUserPwd) {
+        String methodName = "GetEndProjectPlans";
+        return getProjectPlanEntities(strUserCode, strUserPwd, methodName);
     }
 
     public ProjectPlanEntity GetProjectPlanEntity(Integer iPlanId) {
