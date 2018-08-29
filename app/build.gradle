@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'com.jakewharton.butterknife'
 
+// 当前beta版本号
+ext.build_number = "beta1"
+
+// 显示的时间格式，形如20171110
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getDefault())
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -8,7 +16,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,7 +25,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
+    // apk name def
+    android.applicationVariants.all {
+        outputs.all {
+            // 输出apk名称
+            def newApkName
+            if (buildType.zipAlignEnabled) {
+                newApkName = "HNProject_${defaultConfig.versionName}_${releaseTime()}_${buildType.name}.apk"
+            } else {
+                newApkName = "HNProject_${defaultConfig.versionName}_${releaseTime()}_${buildType.name}.apk"
+            }
+            outputFileName = newApkName
+        }
+    }
 }
 
 allprojects {
@@ -44,4 +64,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/ksoap2-android-assembly-3.6.2-jar-with-dependencies.jar')
 
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }

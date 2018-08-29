@@ -1,6 +1,7 @@
 package as.hn.com.hnprojectapp;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +59,9 @@ public class MainActivity extends MyActivityBase {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (navigationView != null) {
+            View Headview = navigationView.getHeaderView(0);
+            TextView tvUser = Headview.findViewById(R.id.currentUser);
+            tvUser.setText(getMyUser().getUserName());
             setupDrawerContent(navigationView);
         }
 
@@ -71,18 +78,29 @@ public class MainActivity extends MyActivityBase {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
-//                        switch (menuItem.getItemId()) {
-//                            case android.R.id.nav_home:
-//
-//                                break;
-//
-//                        }
+                        int id = menuItem.getItemId();
+                        switch (id) {
+                            case R.id.SetDay:
+                                setNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                break;
+                            case R.id.SetNight:
+                                setNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                                break;
+                        }
                         mDrawerLayout.closeDrawers();
                         return true;
                     }
                 });
     }
 
+    //设置界面
+    private void setNightMode(@AppCompatDelegate.NightMode int nightMode) {
+        AppCompatDelegate.setDefaultNightMode(nightMode);
+
+        if (Build.VERSION.SDK_INT >= 11) {
+            recreate();
+        }
+    }
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());

@@ -84,8 +84,9 @@ public class PlanListActivity extends MyActivityBase {
             return true;
         } else if (id == android.R.id.home) {
             //打开主页
-            Intent intent = new Intent(PlanListActivity.this, MainActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(PlanListActivity.this, MainActivity.class);
+//            startActivity(intent);
+            PlanListActivity.this.finish();
             return true;
         }
 

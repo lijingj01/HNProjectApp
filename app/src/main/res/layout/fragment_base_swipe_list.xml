@@ -6,18 +6,19 @@
     android:padding="5dp">
 
 
-    <com.gc.materialdesign.views.Card
+    <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/lightcyan"
+        android:layout_marginTop="5dp"
+
         android:foreground="?android:attr/selectableItemBackground">
 
         <TableLayout
+            style="@style/Widget.CardContent"
             android:id="@+id/base_swipe_item_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,7 +69,7 @@
 
         </TableLayout>
 
-    </com.gc.materialdesign.views.Card>
+    </android.support.v7.widget.CardView>
 
 
 </RelativeLayout>

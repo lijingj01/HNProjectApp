@@ -19,16 +19,22 @@
             android:id="@+id/nav_discussion"
             android:icon="@drawable/ic_forum"
             android:title="Discussion" />
+        <item
+            android:id="@+id/nav_change"
+            android:icon="@drawable/ic_build_user"
+            android:title="账号管理" />
     </group>
 
-    <item android:title="Sub items">
+    <item android:title="模式切换">
         <menu>
             <item
-                android:icon="@drawable/ic_dashboard"
-                android:title="Sub item 1" />
+                android:id="@+id/SetDay"
+                android:icon="@drawable/ic_wb_sunny"
+                android:title="日间模式" />
             <item
-                android:icon="@drawable/ic_forum"
-                android:title="Sub item 2" />
+                android:id="@+id/SetNight"
+                android:icon="@drawable/ic_brightness_4"
+                android:title="夜间模式" />
         </menu>
     </item>
 

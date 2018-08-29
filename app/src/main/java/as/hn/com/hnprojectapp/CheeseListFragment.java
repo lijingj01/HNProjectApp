@@ -101,7 +101,7 @@ public class CheeseListFragment extends Fragment {
         public static class ViewHolder extends RecyclerView.ViewHolder {
             TextView dateText;
             TextView planTitle;
-            com.gc.materialdesign.views.Card cardView;
+            android.support.v7.widget.CardView cardView;
             ImageView newsIcon;
             CircleProgressView mCircleBar;
             CircleProgressView mPercentageBar;
@@ -110,7 +110,7 @@ public class CheeseListFragment extends Fragment {
 
             public ViewHolder(final View itemView) {
                 super(itemView);
-                cardView = (com.gc.materialdesign.views.Card) itemView.findViewById(R.id.card_view);
+                cardView = (android.support.v7.widget.CardView) itemView.findViewById(R.id.card_view);
                 dateText = (TextView) itemView.findViewById(R.id.base_swipe_item_Date);
                 planTitle = (TextView) itemView.findViewById(R.id.base_swipe_item_title);
                 mCircleBar = (CircleProgressView) itemView.findViewById(R.id.circleProgressbar);

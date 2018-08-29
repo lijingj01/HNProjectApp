@@ -1,5 +1,6 @@
 package as.hn.com.hnprojectapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -113,8 +114,9 @@ public class PlanVIewActivity extends MyActivityBase {
         if (id == android.R.id.home) {
             //打开主页
             //打开列表页面
-            Intent intent = new Intent(PlanVIewActivity.this, PlanListActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(PlanVIewActivity.this, PlanListActivity.class);
+//            startActivity(intent);
+            PlanVIewActivity.this.finish();
             return true;
         }
 
