@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,10 @@ public class MainActivity extends MyActivityBase {
         }
 
         tabLayout.setupWithViewPager(viewPager);
+
     }
+
+
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -81,10 +86,17 @@ public class MainActivity extends MyActivityBase {
                         int id = menuItem.getItemId();
                         switch (id) {
                             case R.id.SetDay:
+                                //日间模式
                                 setNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                                 break;
                             case R.id.SetNight:
+                                //夜间模式
                                 setNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                                break;
+                            case R.id.nav_change:
+                                //修改密码
+                                Intent intent = new Intent(MainActivity.this, PwdEditActivity.class);
+                                startActivity(intent);
                                 break;
                         }
                         mDrawerLayout.closeDrawers();

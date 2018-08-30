@@ -23,10 +23,15 @@
     <string name="prompt_email">输入账号</string>
     <string name="prompt_password">输入密码</string>
     <string name="action_sign_in">登陆系统</string>
+    <string name="prompt_oldpassword">输入旧密码</string>
+    <string name="prompt_newpassword">输入新密码</string>
+    <string name="prompt_verpassword">验证新密码</string>
+    <string name="action_edit_pwd">确认修改</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_verpassword">密码两次输入不匹配</string>
+    <string name="error_invalid_password">密码长度太短了</string>
+    <string name="error_incorrect_password">密码有误</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."

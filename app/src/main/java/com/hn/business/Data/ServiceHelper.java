@@ -359,7 +359,7 @@ public class ServiceHelper {
             String strMobilePhone = jsonObject.getString("MobilePhone");
 
             if (strUserCode.equals(strLoginUser)) {
-                UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strNickName, strUserName, strPwdCode);
+                UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strUserName, strNickName, strPwdCode);
                 item.setWXCode(strWXCode);
                 item.setMobilePhone(strMobilePhone);
                 isLogin = true;
@@ -420,6 +420,54 @@ public class ServiceHelper {
         // 设置需调用WebService接口需要传入的参数
         rpc.addProperty("strUserCode", strUserCode);
         rpc.addProperty("strPwdCode", strMD5PWd);
+
+        // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        envelope.bodyOut = rpc;
+
+        // 设置是否调用的是dotNet开发的WebService
+        envelope.dotNet = true;
+        (new MarshalBase64()).register(envelope);
+
+        // 等价于envelope.bodyOut = rpc;
+        envelope.setOutputSoapObject(rpc);
+        HttpTransportSE transport = new HttpTransportSE(endPoint);
+        transport.debug = true;
+        try {
+
+            // 调用WebService
+            transport.call(soapAction, envelope);
+            if (envelope.getResponse() != null) {
+//
+                String strReturn = envelope.getResponse().toString();
+                isLogin = LoginToDB(strUserCode, strReturn);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isLogin;
+    }
+
+    //用户修改密码
+    public boolean UserEditPwd(String strUserCode,String strOldPwd,String strNewPwd){
+        boolean isLogin = false;
+        String methodName = "UserEditPwd";
+        String soapAction = nameSpace + "/" + methodName + "/";
+        // 命名空间     String nameSpace = "http://tempuri.org/";
+        // 调用的方法名称     String methodName = "HelloWorld";
+        // EndPoint     String endPoint = "http://192.168.16.39:1215/WebService.asmx";
+        // SOAP Action     String soapAction = "http://tempuri.org//HelloWorld/";
+        // 指定WebService的命名空间和调用的方法名
+
+        SoapObject rpc = new SoapObject(nameSpace, methodName);
+
+        String strMD5PWd = mmd5(strOldPwd);
+        String strNewMD5Pwd = mmd5(strNewPwd);
+        // 设置需调用WebService接口需要传入的参数
+        rpc.addProperty("strUserCode", strUserCode);
+        rpc.addProperty("strPwdCode", strMD5PWd);
+        rpc.addProperty("strNewPwdCode", strNewMD5Pwd);
 
         // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
