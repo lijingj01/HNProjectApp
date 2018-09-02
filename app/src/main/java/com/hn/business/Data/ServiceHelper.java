@@ -386,6 +386,16 @@ public class ServiceHelper {
         edit.commit();
     }
 
+    //清除用户登陆的保存的本地信息
+    public void UserRemoveLocal() {
+        SharedPreferences.Editor edit = context.getSharedPreferences("mypsd", context.MODE_PRIVATE).edit();
+        edit.remove("USER_CODE");
+        edit.remove("USER_NAME");
+        edit.remove("USER_NICK");
+        edit.remove("USER_PWD");
+        edit.commit();
+    }
+
     /**
      * 获取本地存储的用户登陆信息
      */

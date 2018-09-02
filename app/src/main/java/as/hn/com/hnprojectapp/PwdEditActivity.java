@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,8 @@ public class PwdEditActivity extends MyActivityBase {
     EditText verpassword;
     @BindView(R.id.email_edit_pwd_button)
     Button email_edit_pwd_button;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,9 @@ public class PwdEditActivity extends MyActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwd_edit);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //当前用户
         currentUser.setText(getMyUser().getUserName());
@@ -82,12 +90,12 @@ public class PwdEditActivity extends MyActivityBase {
             //region 去服务器修改密码并验证
             ServiceHelper serviceHelper = new ServiceHelper();
             if (serviceHelper.UserEditPwd(strUserCode, oldpwd, newpwd)) {
+                //清除本地存储后重新登陆
+                serviceHelper.UserRemoveLocal();
 //                showProgress(false);
-//                ToastUtils.showToast(this, "修改密码成功！");
                 ShowMessage("修改密码成功！",true);
             } else {
 //                showProgress(false);
-//                ToastUtils.showToast(this, "修改密码失败，原密码错误！");
                 ShowMessage("修改密码失败，原密码错误！", false);
             }
         }
@@ -100,7 +108,7 @@ public class PwdEditActivity extends MyActivityBase {
             @Override
             public void onClick(View v) {
                 if(isEdit) {
-                    ToMain();
+                    ToLogin();
                 }else{
 
                 }
@@ -108,10 +116,12 @@ public class PwdEditActivity extends MyActivityBase {
         });
         dialog.show();
     }
-    private void ToMain(){
-        //回到主页
-        Intent intent = new Intent(PwdEditActivity.this, MainActivity.class);
+
+    private void ToLogin() {
+        //回到登录页
+        Intent intent = new Intent(PwdEditActivity.this, LoginActivity.class);
         startActivity(intent);
+        PwdEditActivity.this.finish();
     }
 
 
@@ -119,4 +129,41 @@ public class PwdEditActivity extends MyActivityBase {
         //TODO: Replace this with your own logic
         return password.length() > 4;
     }
+
+    //region 菜单控件
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+
+            //打开列表页面
+            Intent intent = new Intent(PwdEditActivity.this, PlanListActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_login) {
+            //打开登陆页面
+            Intent intent = new Intent(PwdEditActivity.this, LoginActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == android.R.id.home) {
+            //打开主页
+            Intent intent = new Intent(PwdEditActivity.this, MainActivity.class);
+            startActivity(intent);
+            PwdEditActivity.this.finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    //endregion
 }

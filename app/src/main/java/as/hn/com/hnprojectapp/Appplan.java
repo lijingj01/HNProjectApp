@@ -146,6 +146,7 @@ public class Appplan extends MyActivityBase {
                 //跳转进入列表页
                 Intent intent = new Intent(Appplan.this, MainActivity.class);
                 startActivity(intent);
+                Appplan.this.finish();
 
             }
         });

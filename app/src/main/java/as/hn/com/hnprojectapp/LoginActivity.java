@@ -210,6 +210,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 //回到主页
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                LoginActivity.this.finish();
             } else {
                 showProgress(false);
                 mEmailView.setError("登录失败，账号密码错误！");
