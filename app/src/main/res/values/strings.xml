@@ -21,6 +21,8 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">输入账号</string>
+    <string name="prompt_username">输入姓名</string>
+    <string name="prompt_nickname">输入昵称</string>
     <string name="prompt_password">输入密码</string>
     <string name="action_sign_in">登陆系统</string>
     <string name="prompt_oldpassword">输入旧密码</string>
@@ -39,4 +41,5 @@
     <string name="title_activity_add_percentage">新增计划完成进度信息</string>
     <string name="title_activity_appplan">新增计划</string>
     <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="title_activity_register">注册系统</string>
 </resources>

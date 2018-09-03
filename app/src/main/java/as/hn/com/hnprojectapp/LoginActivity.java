@@ -64,16 +64,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    //private AutoCompleteTextView mEmailView;
-//    private EditText mPasswordView;
-//    private View mProgressView;
-//    private View mLoginFormView;
+
 
     @BindView(R.id.email) AutoCompleteTextView mEmailView;
     @BindView(R.id.password)EditText mPasswordView;
     @BindView(R.id.login_form)View mLoginFormView;
     @BindView(R.id.login_progress)View mProgressView;
     @BindView(R.id.email_sign_in_button)Button mEmailSignInButton;
+    @BindView(R.id.register_button)
+    Button register_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -103,6 +102,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        register_button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //注册页面
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
 

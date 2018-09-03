@@ -6,7 +6,7 @@ ext.build_number = "beta1"
 
 // 显示的时间格式，形如20171110
 def releaseTime() {
-    return new Date().format("yyyyMMddHHmmss", TimeZone.getDefault())
+    return new Date().format("yyyyMMdd", TimeZone.getDefault())
 }
 
 android {

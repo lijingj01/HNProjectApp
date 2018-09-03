@@ -45,7 +45,7 @@ public class MainActivity extends MyActivityBase {
     @BindView(R.id.tabs)
     TabLayout tabLayout;
 
-
+    private String s;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +73,8 @@ public class MainActivity extends MyActivityBase {
 
         tabLayout.setupWithViewPager(viewPager);
 
+
+//        System.out.println(s.equals("test string"));
     }
 
 
