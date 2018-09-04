@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.hn.business.Data.ServiceHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +68,9 @@ public class MainActivity extends MyActivityBase {
             tvUser.setText(getMyUser().getUserName());
             setupDrawerContent(navigationView);
         }
+
+        ServiceHelper serviceHelper = new ServiceHelper();
+        //        serviceHelper.UserRegiter()
 
         if (viewPager != null) {
             setupViewPager(viewPager);

@@ -88,7 +88,7 @@ public class ServiceHelper {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse() != null) {
-//                System.out.println(envelope.getResponse());
+                //                System.out.println(envelope.getResponse());
                 isAdd = Boolean.valueOf(envelope.getResponse().toString());
             }
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public class ServiceHelper {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse() != null) {
-//                System.out.println(envelope.getResponse());
+                //                System.out.println(envelope.getResponse());
                 String strJsonList = String.valueOf(envelope.getResponse());
 
                 //region 将Json数据转换成实体对象
@@ -140,7 +140,31 @@ public class ServiceHelper {
         return items;
     }
 
-    public List<ProjectPlanEntity> GetCurrentProjectPlanList(String strUserCode,String strUserPwd) {
+    private ProjectPlanEntity JsonToPlanEntity(String strJson) {
+        try {
+            JSONObject jsonObject = new JSONObject(strJson);
+            int iId = jsonObject.getInt("Id");
+            String strTitle = jsonObject.getString("PlanTitle");
+            String strContent = jsonObject.getString("PlanContent");
+            String strBDate = jsonObject.getString("PlanBeginDate");
+            String strEDate = jsonObject.getString("PlanEndDate");
+            boolean isEnd = jsonObject.getBoolean("IsEnd");
+            int iEndPercentage = jsonObject.getInt("EndPercentage");
+            int iTimeUsePercentage = jsonObject.getInt("TimeUsePercentage");
+            String strUserCode = jsonObject.getString("UserCode");
+            String strAddTime = jsonObject.getString("AddTime");
+
+            ProjectPlanEntity item = new ProjectPlanEntity(iId, strTitle, strContent, strBDate, strEDate, isEnd, iEndPercentage, iTimeUsePercentage, strUserCode, strAddTime);
+
+            return item;
+
+        } catch (JSONException ex) {
+            //            ex.printStackTrace();
+            return new ProjectPlanEntity();
+        }
+    }
+
+    public List<ProjectPlanEntity> GetCurrentProjectPlanList(String strUserCode, String strUserPwd) {
 
         String methodName = "GetCurrentProjectPlans";
 
@@ -175,7 +199,7 @@ public class ServiceHelper {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse() != null) {
-//                System.out.println(envelope.getResponse());
+                //                System.out.println(envelope.getResponse());
                 String strJsonList = String.valueOf(envelope.getResponse());
 
                 //region 将Json数据转换成实体对象
@@ -194,6 +218,7 @@ public class ServiceHelper {
         String methodName = "GetOvertimeProjectPlans";
         return getProjectPlanEntities(strUserCode, strUserPwd, methodName);
     }
+
     public List<ProjectPlanEntity> GetEndProjectPlanList(String strUserCode, String strUserPwd) {
         String methodName = "GetEndProjectPlans";
         return getProjectPlanEntities(strUserCode, strUserPwd, methodName);
@@ -227,7 +252,7 @@ public class ServiceHelper {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse() != null) {
-//                System.out.println(envelope.getResponse());
+                //                System.out.println(envelope.getResponse());
                 String strJsonList = String.valueOf(envelope.getResponse());
 
                 //region 将Json数据转换成实体对象
@@ -240,6 +265,34 @@ public class ServiceHelper {
 
         return item;
     }
+
+    private void LoadJsonList(List<ProjectPlanEntity> items, String strJsonList) {
+        try {
+            JSONArray jsonArray = new JSONArray(strJsonList);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                int iId = jsonObject.getInt("Id");
+                String strTitle = jsonObject.getString("PlanTitle");
+                String strContent = jsonObject.getString("PlanContent");
+                String strBDate = jsonObject.getString("PlanBeginDate");
+                String strEDate = jsonObject.getString("PlanEndDate");
+                boolean isEnd = jsonObject.getBoolean("IsEnd");
+                int iEndPercentage = jsonObject.getInt("EndPercentage");
+                int iTimeUsePercentage = jsonObject.getInt("TimeUsePercentage");
+                String strUserCode = jsonObject.getString("UserCode");
+                String strAddTime = jsonObject.getString("AddTime");
+                int pIndex = (i + 1) * 10;
+                ProjectPlanEntity item = new ProjectPlanEntity(iId, strTitle, strContent, strBDate, strEDate, isEnd, iEndPercentage, iTimeUsePercentage, strUserCode, strAddTime);
+
+                items.add(item);
+            }
+
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     //endregion
 
     //region 计划进度操作方法
@@ -292,58 +345,8 @@ public class ServiceHelper {
     //endregion
 
     //region 用户登陆操作方法
-    private void LoadJsonList(List<ProjectPlanEntity> items, String strJsonList) {
-        try {
-            JSONArray jsonArray = new JSONArray(strJsonList);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                int iId = jsonObject.getInt("Id");
-                String strTitle = jsonObject.getString("PlanTitle");
-                String strContent = jsonObject.getString("PlanContent");
-                String strBDate = jsonObject.getString("PlanBeginDate");
-                String strEDate = jsonObject.getString("PlanEndDate");
-                boolean isEnd = jsonObject.getBoolean("IsEnd");
-                int iEndPercentage = jsonObject.getInt("EndPercentage");
-                int iTimeUsePercentage = jsonObject.getInt("TimeUsePercentage");
-                String strUserCode = jsonObject.getString("UserCode");
-                String strAddTime = jsonObject.getString("AddTime");
-                int pIndex = (i + 1) * 10;
-                ProjectPlanEntity item = new ProjectPlanEntity(iId, strTitle, strContent, strBDate, strEDate, isEnd, iEndPercentage, iTimeUsePercentage, strUserCode, strAddTime);
-
-                items.add(item);
-            }
-
-        } catch (JSONException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private ProjectPlanEntity JsonToPlanEntity(String strJson) {
-        try {
-            JSONObject jsonObject = new JSONObject(strJson);
-            int iId = jsonObject.getInt("Id");
-            String strTitle = jsonObject.getString("PlanTitle");
-            String strContent = jsonObject.getString("PlanContent");
-            String strBDate = jsonObject.getString("PlanBeginDate");
-            String strEDate = jsonObject.getString("PlanEndDate");
-            boolean isEnd = jsonObject.getBoolean("IsEnd");
-            int iEndPercentage = jsonObject.getInt("EndPercentage");
-            int iTimeUsePercentage = jsonObject.getInt("TimeUsePercentage");
-            String strUserCode = jsonObject.getString("UserCode");
-            String strAddTime = jsonObject.getString("AddTime");
-
-            ProjectPlanEntity item = new ProjectPlanEntity(iId, strTitle, strContent, strBDate, strEDate, isEnd, iEndPercentage, iTimeUsePercentage, strUserCode, strAddTime);
-
-            return item;
-
-        } catch (JSONException ex) {
-//            ex.printStackTrace();
-            return new ProjectPlanEntity();
-        }
-    }
-
-
+    //region 用户登陆信息的本地保存和读取
     private boolean LoginToDB(String strLoginUser, String strUserJson) {
         //判断用户是否登陆成功，并将登陆系统保存到数据库
         try {
@@ -357,11 +360,12 @@ public class ServiceHelper {
             String strWXCode = jsonObject.getString("WXCode");
             String strPwdCode = jsonObject.getString("PwdCode");
             String strMobilePhone = jsonObject.getString("MobilePhone");
-
+            String strToken = jsonObject.getString("UserToken");
             if (strUserCode.equals(strLoginUser)) {
                 UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strUserName, strNickName, strPwdCode);
                 item.setWXCode(strWXCode);
                 item.setMobilePhone(strMobilePhone);
+                item.setUserToken(strToken);
                 isLogin = true;
                 //region 将登录账号数据写入本地数据库随时调用
                 UserInLocal(item);
@@ -376,13 +380,13 @@ public class ServiceHelper {
         }
     }
 
-    //region 用户登陆信息的本地保存和读取
     private void UserInLocal(UserInfoEntity info) {
         SharedPreferences.Editor edit = context.getSharedPreferences("mypsd", context.MODE_PRIVATE).edit();
         edit.putString("USER_CODE", info.getUserCode());
         edit.putString("USER_NAME", info.getUserName());
         edit.putString("USER_NICK", info.getNickName());
         edit.putString("USER_PWD", info.getPwdCode());
+        edit.putString("USER_TOKEN", info.getUserToken());
         edit.commit();
     }
 
@@ -393,6 +397,7 @@ public class ServiceHelper {
         edit.remove("USER_NAME");
         edit.remove("USER_NICK");
         edit.remove("USER_PWD");
+        edit.remove("USER_TOKEN");
         edit.commit();
     }
 
@@ -406,12 +411,13 @@ public class ServiceHelper {
         String strNickName = shared.getString("USER_NAME", "");
         String strUserName = shared.getString("USER_NICK", "");
         String strPwdCode = shared.getString("USER_PWD", "");
+        String strToken = shared.getString("USER_TOKEN", "");
         UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strNickName, strUserName, strPwdCode);
+        item.setUserToken(strToken);
         return item;
     }
 
     //endregion
-
 
     public boolean UserLoginSystem(String strUserCode, String strUserPwd, Context mContext) {
         this.context = mContext;
@@ -448,7 +454,7 @@ public class ServiceHelper {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse() != null) {
-//
+                //
                 String strReturn = envelope.getResponse().toString();
                 isLogin = LoginToDB(strUserCode, strReturn);
             }
@@ -460,7 +466,7 @@ public class ServiceHelper {
     }
 
     //用户修改密码
-    public boolean UserEditPwd(String strUserCode,String strOldPwd,String strNewPwd){
+    public boolean UserEditPwd(String strUserCode, String strOldPwd, String strNewPwd) {
         boolean isLogin = false;
         String methodName = "UserEditPwd";
         String soapAction = nameSpace + "/" + methodName + "/";
@@ -496,7 +502,7 @@ public class ServiceHelper {
             // 调用WebService
             transport.call(soapAction, envelope);
             if (envelope.getResponse() != null) {
-//
+                //
                 String strReturn = envelope.getResponse().toString();
                 isLogin = LoginToDB(strUserCode, strReturn);
             }
@@ -507,5 +513,71 @@ public class ServiceHelper {
         return isLogin;
     }
 
+    /**
+     * 用户注册操作
+     *
+     * @param strUserCode
+     * @param 用户姓名
+     * @param 用户昵称
+     * @param 用户密码
+     * @return
+     */
+    public boolean UserRegiter(String strUserCode, String strUserName, String strNickName, String strPwd) {
+        boolean IsRegiter = false;
+
+        String strMD5PWd = mmd5(strPwd);
+        try {
+            JSONObject json = new JSONObject();
+            json.put("UserCode", strUserCode);
+            json.put("UserName", strUserName);
+            json.put("NickName", strNickName);
+            json.put("PwdCode", strMD5PWd);
+
+            //将json数据转换后传入服务器
+            String strJson = json.toString();
+
+            //region 数据处理
+            String methodName = "UserRegister";
+            String soapAction = nameSpace + "/" + methodName + "/";
+            SoapObject rpc = new SoapObject(nameSpace, methodName);
+            // 设置需调用WebService接口需要传入的参数
+            rpc.addProperty("strRequestJson", strJson);
+            // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+            envelope.bodyOut = rpc;
+
+            // 设置是否调用的是dotNet开发的WebService
+            envelope.dotNet = true;
+            (new MarshalBase64()).register(envelope);
+
+            // 等价于envelope.bodyOut = rpc;
+            envelope.setOutputSoapObject(rpc);
+            HttpTransportSE transport = new HttpTransportSE(endPoint);
+            transport.debug = true;
+            try {
+
+                // 调用WebService
+                transport.call(soapAction, envelope);
+                if (envelope.getResponse() != null) {
+                    String strReturn = envelope.getResponse().toString();
+                    UserAPIResult apiResult = new UserAPIResult(strReturn);
+                    //添加失败
+                    if (apiResult.getResultStatus().equals("fail")) {
+                        IsRegiter = false;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //endregion
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            IsRegiter = false;
+        }
+        return IsRegiter;
+    }
+
+    //    private
     //endregion
 }

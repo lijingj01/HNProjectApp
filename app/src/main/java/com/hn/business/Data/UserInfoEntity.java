@@ -10,6 +10,7 @@ public class UserInfoEntity {
     private String PwdCode;
     private String WXCode;
     private String MobilePhone;
+    private String UserToken;
 
     public UserInfoEntity() {
 
@@ -88,5 +89,13 @@ public class UserInfoEntity {
 
     public void setMobilePhone(String mobilePhone) {
         MobilePhone = mobilePhone;
+    }
+
+    public String getUserToken() {
+        return UserToken;
+    }
+
+    public void setUserToken(String userToken) {
+        UserToken = userToken;
     }
 }
