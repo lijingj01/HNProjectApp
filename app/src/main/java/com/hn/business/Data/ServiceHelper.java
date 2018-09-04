@@ -361,7 +361,7 @@ public class ServiceHelper {
             String strPwdCode = jsonObject.getString("PwdCode");
             String strMobilePhone = jsonObject.getString("MobilePhone");
             String strToken = jsonObject.getString("UserToken");
-            if (strUserCode.equals(strLoginUser)) {
+            if (!(strToken == null || strToken.length() <= 0)) {
                 UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strUserName, strNickName, strPwdCode);
                 item.setWXCode(strWXCode);
                 item.setMobilePhone(strMobilePhone);
@@ -564,6 +564,8 @@ public class ServiceHelper {
                     //添加失败
                     if (apiResult.getResultStatus().equals("fail")) {
                         IsRegiter = false;
+                    } else {
+                        IsRegiter = true;
                     }
                 }
             } catch (Exception e) {

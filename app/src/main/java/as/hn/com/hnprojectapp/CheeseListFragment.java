@@ -66,13 +66,13 @@ public class CheeseListFragment extends Fragment {
 //        String strType = getArguments().getString("listType");
         switch (ListTypeValue){
             case "Current":
-                mDataList = serviceHelper.GetCurrentProjectPlanList(myUser.getUserCode(),myUser.getPwdCode());
+                mDataList = serviceHelper.GetCurrentProjectPlanList(myUser.getUserCode(), myUser.getUserToken());
                 break;
             case "Overtime":
-                mDataList = serviceHelper.GetOvertimeProjectPlanList(myUser.getUserCode(), myUser.getPwdCode());
+                mDataList = serviceHelper.GetOvertimeProjectPlanList(myUser.getUserCode(), myUser.getUserToken());
                 break;
             case "End":
-                mDataList = serviceHelper.GetEndProjectPlanList(myUser.getUserCode(), myUser.getPwdCode());
+                mDataList = serviceHelper.GetEndProjectPlanList(myUser.getUserCode(), myUser.getUserToken());
                 break;
         }
         //endregion

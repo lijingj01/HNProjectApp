@@ -73,28 +73,32 @@ public class RegisterActivity extends AppCompatActivity {
             verpassword.setError(getString(R.string.error_invalid_verpassword));
             focusView = verpassword;
             cancel = true;
-        } else if (!TextUtils.isEmpty(newpwd)) {
+        } else if (!TextUtils.isEmpty(newpwd) && !isPasswordValid(newpwd)) {
             newpassword.setError(getString(R.string.error_invalid_password));
             focusView = newpassword;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
             //region 去服务器注册账户
             ServiceHelper serviceHelper = new ServiceHelper();
             if (serviceHelper.UserRegiter(usercode, strUserName, strNickName, newpwd)) {
-
+                ShowMessage("注册成功，请用新的账号密码登录系统！", true);
             } else {
-
+                ShowMessage("注册失败，该用户名已经存在！", false);
             }
             //endregion
         }
 
     }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() > 4;
+    }
+
 
     private void ShowMessage(String meg, final boolean isOK) {
         Dialog dialog = new Dialog(RegisterActivity.this, "操作提示", meg);
@@ -113,8 +117,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void ToLogin() {
         //回到登录页
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//        startActivity(intent);
         RegisterActivity.this.finish();
     }
 
@@ -131,7 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
             //返回上级登录页面
-            RegisterActivity.this.finish();
+            ToLogin();
             return true;
         }
 

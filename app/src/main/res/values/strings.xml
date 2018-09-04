@@ -3,7 +3,7 @@
     <string name="action_settings">查看列表</string>
     <string name="action_login">重新登陆</string>
     <string name="action_addplan">新增计划</string>
-    <string name="app_name">我的工作计划</string>
+    <string name="app_name">工作计划</string>
     <string name="btnAddPlanTitle">新增计划</string>
     <string name="btnPlanListTitle">计划列表</string>
     <string name="StrPlanTitle">计划标题</string>
