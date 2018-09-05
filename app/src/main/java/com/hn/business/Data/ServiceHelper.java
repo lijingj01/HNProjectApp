@@ -15,7 +15,9 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*远程服务调用类
@@ -581,5 +583,61 @@ public class ServiceHelper {
     }
 
     //    private
+    //endregion
+
+    //region 异常日志处理
+    public void SendErrorToService(Context mContext, String versioninfo, String mobileInfo, String errorinfo) {
+        //获取当前用户Token
+        UserInfoEntity currentUser = LocalToUser(mContext);
+        String strToken = currentUser.getUserToken();
+
+        SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String strDate = dataFormat.format(new Date());
+        try {
+            JSONObject json = new JSONObject();
+            json.put("UserToken", strToken);
+            json.put("VersionInfo", versioninfo);
+            json.put("MobileInfo", mobileInfo);
+            json.put("ErrorInfo", errorinfo);
+            json.put("Created", strDate);
+
+            //将json数据转换后传入服务器
+            String strJson = json.toString();
+
+            //region 数据处理
+            String methodName = "AddErrorLog";
+            String soapAction = nameSpace + "/" + methodName + "/";
+            SoapObject rpc = new SoapObject(nameSpace, methodName);
+            // 设置需调用WebService接口需要传入的参数
+            rpc.addProperty("strRequestJson", strJson);
+            // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+            envelope.bodyOut = rpc;
+
+            // 设置是否调用的是dotNet开发的WebService
+            envelope.dotNet = true;
+            (new MarshalBase64()).register(envelope);
+
+            // 等价于envelope.bodyOut = rpc;
+            envelope.setOutputSoapObject(rpc);
+            HttpTransportSE transport = new HttpTransportSE(endPoint);
+            transport.debug = true;
+            try {
+
+                // 调用WebService
+                transport.call(soapAction, envelope);
+                if (envelope.getResponse() != null) {
+                    String strReturn = envelope.getResponse().toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //endregion
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     //endregion
 }

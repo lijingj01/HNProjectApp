@@ -9,6 +9,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.hn.business.Data.ServiceHelper;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -162,8 +164,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         collectDeviceInfo(mContext);
 
         //保存日志文件
-
-        saveCrashInfo2File(ex);
+        saveCrashInfo2Service(ex);
+//        saveCrashInfo2File(ex);
 
         return true;
 
@@ -224,6 +226,88 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     }
 
+    //region 内部获取参数数据
+
+    /**
+     * 获取错误的信息
+     *
+     * @param arg1
+     * @return
+     */
+    private String getErrorInfo(Throwable arg1) {
+        Writer writer = new StringWriter();
+        PrintWriter pw = new PrintWriter(writer);
+        arg1.printStackTrace(pw);
+        pw.close();
+        String error = writer.toString();
+        return error;
+    }
+
+    /**
+     * 获取手机的硬件信息
+     *
+     * @return
+     */
+    private String getMobileInfo() {
+        StringBuffer sb = new StringBuffer();
+        //通过反射获取系统的硬件信息
+        try {
+            Field[] fields = Build.class.getDeclaredFields();
+            for (Field field : fields) {
+                //暴力反射 ,获取私有的信息
+                field.setAccessible(true);
+                String name = field.getName();
+                String value = field.get(null).toString();
+                sb.append(name + "=" + value);
+                sb.append("\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 获取手机的版本信息
+     *
+     * @return
+     */
+    private String getVersionInfo() {
+        try {
+            PackageManager pm = mContext.getPackageManager();
+            PackageInfo info = pm.getPackageInfo(mContext.getPackageName(), 0);
+            return info.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "版本号未知";
+        }
+    }
+    //endregion
+
+    /**
+     * 保存错误信息到服务器上去
+     *
+     * @param ex
+     */
+    private void saveCrashInfo2Service(Throwable ex) {
+
+        // 1.获取当前程序的版本号. 版本的id
+        String versioninfo = getVersionInfo();
+
+        // 2.获取手机的硬件信息.
+        String mobileInfo = getMobileInfo();
+
+        // 3.把错误的堆栈信息 获取出来
+        String errorinfo = getErrorInfo(ex);
+
+        //把数据上传到服务进行记录
+        try {
+            ServiceHelper serviceHelper = new ServiceHelper();
+            serviceHelper.SendErrorToService(mContext, versioninfo, mobileInfo, errorinfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 保存错误信息到文件中
