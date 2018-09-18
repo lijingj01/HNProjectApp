@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hn.business.Data.ServiceHelper;
+import com.hn.business.Tools.CrashHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
 //        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        //测试代码
+        String testId = CrashHandler.getUniquePsuedoID();
+        mEmailView.setText(testId);
 
 //        mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

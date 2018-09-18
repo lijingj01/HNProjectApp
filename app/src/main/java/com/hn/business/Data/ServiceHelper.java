@@ -467,6 +467,14 @@ public class ServiceHelper {
         return isLogin;
     }
 
+    /**
+     * 修改用户密码操作
+     * d* @param strUserCode
+     *
+     * @param strOldPwd
+     * @param strNewPwd
+     * @return
+     */
     //用户修改密码
     public boolean UserEditPwd(String strUserCode, String strOldPwd, String strNewPwd) {
         boolean isLogin = false;
@@ -583,6 +591,101 @@ public class ServiceHelper {
     }
 
     //    private
+    //endregion
+
+    //region 工作组操作方法
+
+
+    /**
+     * 获取用户的工作组成员集合
+     *
+     * @param strUserToken
+     * @return
+     */
+    public List<UserInfoEntity> GetUserTeams(String strUserToken) {
+        List<UserInfoEntity> items = new ArrayList<>();
+        try {
+            String strMethodName = "GetUserTeams";
+            JSONObject json = new JSONObject();
+            json.put("UserToken", strUserToken);
+            String strRequestJson = json.toString();
+
+            String strJson = GetServiceJsonRequest(strMethodName, strRequestJson);
+
+            //region 分析数据
+            if (strJson != "") {
+                JSONArray jsonArray = new JSONArray(strJson);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    int iId = jsonObject.getInt("Id");
+                    String strUserCode = jsonObject.getString("UserCode");
+                    String strNickName = jsonObject.getString("NickName");
+                    String strUserName = jsonObject.getString("UserName");
+                    String strWXCode = jsonObject.getString("WXCode");
+                    String strPwdCode = jsonObject.getString("PwdCode");
+                    String strMobilePhone = jsonObject.getString("MobilePhone");
+                    if (!(strUserCode == null || strUserCode.length() <= 0)) {
+                        UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strUserName, strNickName, strPwdCode);
+                        item.setWXCode(strWXCode);
+                        item.setMobilePhone(strMobilePhone);
+
+                        items.add(item);
+                    }
+                }
+            }
+            //endregion
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+    //endregion
+
+    //region 内部操作方法
+
+    /**
+     * 通过调用服务获取数据的Json返回
+     *
+     * @param 调用的方法名称
+     * @param 传递的Json格式的参数
+     * @return
+     */
+    @NonNull
+    private String GetServiceJsonRequest(String methodName, String strRequestJson) {
+        String strJson = "";
+
+        String soapAction = nameSpace + "/" + methodName + "/";
+        SoapObject rpc = new SoapObject(nameSpace, methodName);
+
+        // 设置需调用WebService接口需要传入的参数
+        rpc.addProperty("strRequestJson", strRequestJson);
+
+        // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        envelope.bodyOut = rpc;
+
+        // 设置是否调用的是dotNet开发的WebService
+        envelope.dotNet = true;
+        (new MarshalBase64()).register(envelope);
+
+        // 等价于envelope.bodyOut = rpc;
+        envelope.setOutputSoapObject(rpc);
+        HttpTransportSE transport = new HttpTransportSE(endPoint);
+        transport.debug = true;
+        try {
+
+            // 调用WebService
+            transport.call(soapAction, envelope);
+            if (envelope.getResponse() != null) {
+                strJson = String.valueOf(envelope.getResponse());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return strJson;
+    }
     //endregion
 
     //region 异常日志处理

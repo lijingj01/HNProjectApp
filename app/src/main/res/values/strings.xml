@@ -42,4 +42,5 @@
     <string name="title_activity_appplan">新增计划</string>
     <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="title_activity_register">注册系统</string>
+    <string name="title_activity_team_list">我的团队</string>
 </resources>

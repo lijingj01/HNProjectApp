@@ -16,7 +16,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,12 +38,17 @@ android {
             outputFileName = newApkName
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 allprojects {
     repositories {
         mavenCentral()
         maven { url "https://jitpack.io" }
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
     }
 }
 
@@ -55,6 +60,7 @@ dependencies {
     api 'com.malinskiy:materialicons:1.0.2'
     api 'com.github.vajro:MaterialDesignLibrary:1.6'
     api 'com.jakewharton:butterknife:8.8.1'
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.blankj:utilcode:1.19.0'
     implementation 'com.github.mthli:Knife:v1.1'

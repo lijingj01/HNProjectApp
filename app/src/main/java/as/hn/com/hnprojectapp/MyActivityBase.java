@@ -28,6 +28,11 @@ public class MyActivityBase extends AppCompatActivity {
 
     private UserInfoEntity MyUser;
 
+    /**
+     * 蒲公英的APPID
+     */
+    protected final String PgyAppId = "3462c64c8839f1f4f2120710b910f679";
+
     @Override
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {

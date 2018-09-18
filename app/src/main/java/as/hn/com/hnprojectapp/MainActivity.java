@@ -23,10 +23,12 @@ import android.widget.Toast;
 
 
 import com.hn.business.Data.ServiceHelper;
+import com.pgyersdk.update.PgyUpdateManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import as.hn.com.hnprojectapp.Teams.TeamListActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -78,11 +80,9 @@ public class MainActivity extends MyActivityBase {
 
         tabLayout.setupWithViewPager(viewPager);
 
-
-//        System.out.println(s.equals("test string"));
+        //调用蒲公英的接口来自动更新
+        PgyUpdateManager.register(MainActivity.this);
     }
-
-
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -104,6 +104,11 @@ public class MainActivity extends MyActivityBase {
                                 //修改密码
                                 Intent intent = new Intent(MainActivity.this, PwdEditActivity.class);
                                 startActivity(intent);
+                                break;
+                            case R.id.nav_friends:
+                                //我的团队
+                                Intent fintent = new Intent(MainActivity.this, TeamListActivity.class);
+                                startActivity(fintent);
                                 break;
                         }
                         mDrawerLayout.closeDrawers();
