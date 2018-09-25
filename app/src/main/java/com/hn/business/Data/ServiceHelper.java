@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import com.hn.business.Tools.CrashHandler;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -355,6 +357,7 @@ public class ServiceHelper {
             boolean isLogin = false;
 
             JSONObject jsonObject = new JSONObject(strUserJson);
+
             int iId = jsonObject.getInt("Id");
             String strUserCode = jsonObject.getString("UserCode");
             String strNickName = jsonObject.getString("NickName");
@@ -363,17 +366,18 @@ public class ServiceHelper {
             String strPwdCode = jsonObject.getString("PwdCode");
             String strMobilePhone = jsonObject.getString("MobilePhone");
             String strToken = jsonObject.getString("UserToken");
-            if (!(strToken == null || strToken.length() <= 0)) {
-                UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strUserName, strNickName, strPwdCode);
-                item.setWXCode(strWXCode);
-                item.setMobilePhone(strMobilePhone);
-                item.setUserToken(strToken);
-                isLogin = true;
-                //region 将登录账号数据写入本地数据库随时调用
-                UserInLocal(item);
-                //endregion
+            if (strUserCode != null) {
+                if (!(strToken == null || strToken.length() <= 0)) {
+                    UserInfoEntity item = new UserInfoEntity(iId, strUserCode, strUserName, strNickName, strPwdCode);
+                    item.setWXCode(strWXCode);
+                    item.setMobilePhone(strMobilePhone);
+                    item.setUserToken(strToken);
+                    isLogin = true;
+                    //region 将登录账号数据写入本地数据库随时调用
+                    UserInLocal(item);
+                    //endregion
+                }
             }
-
 
             return isLogin;
 
@@ -461,6 +465,32 @@ public class ServiceHelper {
                 isLogin = LoginToDB(strUserCode, strReturn);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isLogin;
+    }
+
+    public boolean UserLoginApp(String strUserCode, String strUserPwd, Context mContext) {
+        this.context = mContext;
+        boolean isLogin = false;
+        try {
+
+            String PseudoID = CrashHandler.getUniquePsuedoID();
+            String strMD5PWd = mmd5(strUserPwd);
+
+            String strMethodName = "UserLoginV2";
+            JSONObject json = new JSONObject();
+            json.put("UserCode", strUserCode);
+            json.put("PwdCode", strMD5PWd);
+            json.put("PseudoID", PseudoID);
+            String strRequestJson = json.toString();
+            String strJson = GetServiceJsonRequest(strMethodName, strRequestJson);
+
+            if (strJson != "") {
+                isLogin = LoginToDB(strUserCode, strJson);
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

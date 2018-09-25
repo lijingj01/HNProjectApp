@@ -87,8 +87,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         populateAutoComplete();
 
         //测试代码
-        String testId = CrashHandler.getUniquePsuedoID();
-        mEmailView.setText(testId);
+//        String testId = CrashHandler.getUniquePsuedoID();
+//        mEmailView.setText(testId);
 
 //        mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             //region 去服务器验证身份
             ServiceHelper serviceHelper = new ServiceHelper();
-            if (serviceHelper.UserLoginSystem(email, password, LoginActivity.this)) {
+            if (serviceHelper.UserLoginApp(email, password, LoginActivity.this)) {
                 showProgress(false);
                 mEmailView.setText("登录成功！");
                 //回到主页

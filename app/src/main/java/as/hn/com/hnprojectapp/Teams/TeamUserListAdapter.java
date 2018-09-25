@@ -43,7 +43,7 @@ public class TeamUserListAdapter extends RecyclerView.Adapter<TeamUserListAdapte
             return;
 
         NormalItemHolder holder = (NormalItemHolder) viewHolder;
-        bindNormalItem(entity, holder.userName, holder.userFace);
+        bindNormalItem(entity, holder.userName, holder.userCode, holder.userFace);
 
 //        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -74,9 +74,10 @@ public class TeamUserListAdapter extends RecyclerView.Adapter<TeamUserListAdapte
 //        PlanViewActivity.actionStart(mContext, entity.getNewsID(), entity.getRecommendAmount(), entity.getCommentAmount());
     }
 
-    void bindNormalItem(UserInfoEntity entity, TextView uName, ImageView uFace) {
+    void bindNormalItem(UserInfoEntity entity, TextView uName, TextView uCode, ImageView uFace) {
 
         uName.setText(entity.getUserName());
+        uCode.setText(entity.getUserCode());
 //        uFace.setText(entity.getPlanTitle());
 
     }
@@ -84,6 +85,7 @@ public class TeamUserListAdapter extends RecyclerView.Adapter<TeamUserListAdapte
     //region 内部数据类
     public class NormalItemHolder extends RecyclerView.ViewHolder {
         TextView userName;
+        TextView userCode;
         android.support.v7.widget.CardView cardView;
         ImageView userFace;
         Button btnAdd;
@@ -94,14 +96,16 @@ public class TeamUserListAdapter extends RecyclerView.Adapter<TeamUserListAdapte
             cardView = (android.support.v7.widget.CardView) itemView.findViewById(R.id.card_view);
             userName = (TextView) itemView.findViewById(R.id.userName);
             userFace = (ImageView) itemView.findViewById(R.id.userFace);
+            userCode = (TextView) itemView.findViewById(R.id.userCode);
 
 //            btnAdd =(Button)itemView.findViewById(R.id.btn_add_percentage);
 //            btnView = (Button)itemView.findViewById(R.id.btn_view_percentage);
             itemView.findViewById(R.id.base_swipe_item_container).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RecyclerView recyclerView = (RecyclerView) itemView.findViewById(R.id.recyclerView);
-                    int position = recyclerView.indexOfChild(v);
+                    String strUCode = userCode.getText().toString();
+//                    RecyclerView recyclerView = (RecyclerView) itemView.findViewById(R.id.recyclerView);
+//                    int position = recyclerView.indexOfChild(v);
 //                    getPosition()
 //                    showNewsDetail(position);
                 }
